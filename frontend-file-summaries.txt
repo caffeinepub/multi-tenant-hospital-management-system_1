@@ -1,0 +1,12 @@
+{
+  "frontend/src/App.tsx": "Main application entry point with TanStack Router setup, all route definitions, role-based navigation guards, and ThemeProvider/Toaster wrappers. Defines the complete route tree including super-admin, hospital-admin (with all sub-pages), doctor, and patient routes.",
+  "frontend/src/components/dashboards/admin/BloodBankPage.tsx": "Blood bank management page showing all 8 blood groups as cards with quantity bars, low-stock alerts, and an edit dialog to update quantities and minimum thresholds per blood group.",
+  "frontend/src/components/dashboards/admin/DoctorsPage.tsx": "Doctors management page with a searchable data table and add/edit modal for doctor records including name, specialization, availability schedule, and optional principal ID; uses localStorage for persistence.",
+  "frontend/src/components/dashboards/admin/AppointmentsPage.tsx": "Appointments management page for Hospital Admins with a filterable table by status, inline status update select, and a create appointment modal; uses localStorage for persistence.",
+  "frontend/src/components/dashboards/admin/StaffPage.tsx": "Staff management page listing hospital staff members with role and department fields, add modal with role dropdown, and localStorage persistence.",
+  "frontend/src/components/dashboards/admin/ReportsPage.tsx": "Reports page with three tabs (Medicine Stock, Bed Occupancy, Blood Stock), each showing a formatted table with status badges and an Export PDF button that triggers browser print dialog.",
+  "frontend/src/components/dashboards/DoctorDashboard.tsx": "Doctor dashboard showing appointment list with treatment update modal (status + notes), and a read-only medicine availability panel; uses localStorage for appointment data.",
+  "frontend/src/components/dashboards/PatientDashboard.tsx": "Patient dashboard with name-based appointment retrieval, appointment booking modal with doctor selection, upcoming/past appointment lists, bed availability stats, and blood group availability panel.",
+  "frontend/src/components/layout/AppLayout.tsx": "Authenticated app shell with collapsible sidebar (role-based nav items), sticky top navbar with alert notifications and dark mode toggle, main content outlet, and footer.",
+  "frontend/src/components/layout/Footer.tsx": "App footer with dynamic year, copyright text, and caffeine.ai attribution link with UTM tracking parameters."
+}

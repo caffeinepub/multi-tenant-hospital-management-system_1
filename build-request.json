@@ -1,0 +1,455 @@
+{
+  "kind": "build_request",
+  "title": "Multi-Tenant Hospital Management System (HMS)",
+  "projectName": "MediCore HMS",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "text": "Implement Internet Identity authentication as the sole login method, replacing JWT. Map roles (Super Admin, Hospital Admin, Doctor, Patient) to principals stored in the backend. Enforce role-based access control so each principal can only access endpoints and data permitted by their role.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Authentication: JWT",
+          "Role-based access control",
+          "JWT login",
+          "Password encryption"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Users can log in via Internet Identity",
+        "Each user principal is assigned exactly one role",
+        "API calls from a principal not matching the required role are rejected",
+        "Passwords are not stored (Internet Identity handles credentials)"
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "text": "Implement multi-tenancy in the backend: every Hospital Admin, Doctor, Supplier, Medicine, Bed, BloodStock, and Appointment record must carry a hospitalId. All queries must be scoped to the caller's hospitalId so data from one hospital is never visible to another hospital.",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Each hospital has its own separate data",
+          "Data of one hospital should not be visible to another hospital"
+        ]
+      },
+      "acceptanceCriteria": [
+        "A Hospital Admin from Hospital A cannot retrieve records belonging to Hospital B",
+        "All backend query functions filter by the caller's hospitalId",
+        "Super Admin can retrieve records across all hospitals"
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "text": "Create backend data models and CRUD operations for: Users, Hospitals, Medicines (with stock quantity, minimum quantity, expiry date, supplierId), Suppliers, Beds (type: general/ICU, status: available/occupied), BloodStock (blood group, quantity, minimum quantity), Appointments (patientId, doctorId, hospitalId, datetime, status), and Reports (aggregated snapshots).",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Create collections/tables: Users, Hospitals, Medicines, Suppliers, Beds, BloodStock, Appointments, Reports"
+        ]
+      },
+      "acceptanceCriteria": [
+        "All eight entity types are persisted in stable backend storage",
+        "CRUD operations are exposed for each entity",
+        "Medicines store expiry date and minimum stock threshold",
+        "Beds distinguish between general and ICU types",
+        "BloodStock stores all standard ABO/Rh blood groups"
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "text": "Implement Medicine Management: Hospital Admins can add, update, and delete medicines. Track current stock quantity. Expose a query that returns medicines with stock below minimum quantity (low stock alert). Expose a query that returns medicines whose expiry date has passed or is within 7 days (expiry alert).",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Add / Update / Delete medicines",
+          "Track stock quantity",
+          "Show low stock alerts",
+          "Show expired medicines",
+          "Expiry date monitoring",
+          "Notification before expiry (7 days prior)"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Hospital Admin can create, read, update, delete medicines scoped to their hospital",
+        "getLowStockMedicines returns medicines where currentStock < minimumQuantity",
+        "getExpiringMedicines returns medicines expiring within 7 days or already expired",
+        "Stock quantity updates automatically when a treatment record uses a medicine"
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "text": "Implement Supplier Management: Hospital Admins can add and edit suppliers. Each medicine record can reference a supplierId. Expose a query returning all medicines linked to a given supplier.",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Add supplier",
+          "Edit supplier",
+          "Track supplier medicines"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Hospital Admin can create and update supplier records",
+        "Medicines can be associated with a supplier",
+        "Query returns all medicines for a given supplierId within the caller's hospital"
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "text": "Implement Bed Management: Hospital Admins can add beds with type (General or ICU) and toggle status (Available/Occupied). Expose queries for total beds, available beds, occupied beds, and ICU bed counts per hospital.",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Total beds",
+          "Available beds",
+          "Occupied beds",
+          "ICU beds tracking"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Bed records include type (General/ICU) and status (Available/Occupied)",
+        "getBedStats returns total, available, occupied, and ICU counts",
+        "Patients can query available beds for their hospital"
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "text": "Implement Blood Bank Management: Hospital Admins can manage blood group inventory (A+, A-, B+, B-, AB+, AB-, O+, O-) with quantity and minimum threshold. Expose a query returning blood groups below minimum quantity.",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Blood group availability",
+          "Quantity available",
+          "Low stock alert"
+        ]
+      },
+      "acceptanceCriteria": [
+        "All eight standard blood groups are tracked per hospital",
+        "getLowBloodStock returns groups where quantity < minimumQuantity",
+        "Patients can query blood availability for their hospital"
+      ]
+    },
+    {
+      "id": "REQ-8",
+      "text": "Implement Doctor Management: Hospital Admins can add doctors with specialization and set their availability schedule. Expose queries for doctor list and availability per hospital.",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Add doctor",
+          "Doctor availability",
+          "Specialization",
+          "Appointment scheduling"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Doctor records include name, specialization, and availability schedule",
+        "Hospital Admin can add and update doctor records",
+        "Patients can retrieve the list of available doctors for their hospital"
+      ]
+    },
+    {
+      "id": "REQ-9",
+      "text": "Implement the Appointment System: Patients can book appointments by selecting a doctor and available time slot. Doctors can view their upcoming appointments. Hospital Admins can view all appointments for their hospital.",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Patient can book appointment",
+          "Doctor availability calendar"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Patients can create an appointment record linked to a doctorId and hospitalId",
+        "Doctors see only appointments assigned to them",
+        "Hospital Admin sees all appointments within their hospital",
+        "Appointment status can be updated (scheduled, completed, cancelled)"
+      ]
+    },
+    {
+      "id": "REQ-10",
+      "text": "Implement a Reports module: backend exposes aggregated report queries for medicine usage, current stock, expired medicines, bed occupancy rate, and blood stock levels — all scoped per hospital. Super Admin can request reports across all hospitals.",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Medicine usage report",
+          "Stock report",
+          "Expired medicines report",
+          "Bed occupancy report",
+          "Blood stock report"
+        ]
+      },
+      "acceptanceCriteria": [
+        "getMedicineStockReport returns current quantities and highlights low/expired items",
+        "getBedOccupancyReport returns percentage of occupied beds, broken down by type",
+        "getBloodStockReport returns current quantities per blood group",
+        "Super Admin report aggregates data across all hospitals"
+      ]
+    },
+    {
+      "id": "REQ-11",
+      "text": "Build a Super Admin dashboard page showing: total number of hospitals, list of hospitals with status, and system-wide report summaries. Super Admin can create new hospitals and assign Hospital Admin principals to them.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Super Admin Dashboard",
+          "Create and manage hospitals",
+          "View all hospitals",
+          "View overall reports"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Super Admin sees a stats card row: total hospitals, total users",
+        "Table lists all hospitals with name, admin, and status",
+        "Form to create a new hospital and assign a Hospital Admin principal",
+        "System-wide report summary cards are displayed"
+      ]
+    },
+    {
+      "id": "REQ-12",
+      "text": "Build a Hospital Admin dashboard page with sidebar navigation linking to: Medicines, Suppliers, Beds, Blood Bank, Doctors, Appointments, Staff, and Reports sections. Dashboard home shows summary stat cards for each module.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Hospital Admin Dashboard",
+          "Manage doctors",
+          "Manage medicines",
+          "Manage suppliers",
+          "Manage beds",
+          "Manage blood bank",
+          "View reports",
+          "Manage staff"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Sidebar with links to all Hospital Admin modules is present",
+        "Dashboard home shows cards: total medicines, low stock count, bed occupancy, blood stock alerts, pending appointments",
+        "Each module page renders a searchable, filterable data table",
+        "Add/edit forms are accessible from each module page"
+      ]
+    },
+    {
+      "id": "REQ-13",
+      "text": "Build a Doctor dashboard page showing: list of assigned patients with appointment details, a form to update patient treatment notes and deduct medicine usage, and a read-only medicine availability view.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Doctor Dashboard",
+          "View assigned patients",
+          "Update patient treatment",
+          "View medicine availability"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Doctor sees only their own appointments",
+        "Doctor can update appointment status and add treatment notes",
+        "Medicine availability panel shows current stock for the hospital",
+        "Treatment update automatically triggers stock deduction in the backend"
+      ]
+    },
+    {
+      "id": "REQ-14",
+      "text": "Build a Patient dashboard page allowing patients to: book appointments by browsing doctors and available slots, view their own appointments, check bed availability, check blood group availability, and view their prescribed medicines.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Patient Dashboard",
+          "Book appointment",
+          "View doctor availability",
+          "Check bed availability",
+          "Check blood availability",
+          "View prescribed medicines"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Doctor availability calendar or slot picker is shown when booking",
+        "Patient can see their upcoming and past appointments",
+        "Bed availability summary card is shown",
+        "Blood group availability table is shown",
+        "Prescribed medicines list is visible per appointment"
+      ]
+    },
+    {
+      "id": "REQ-15",
+      "text": "Implement in-app alert notifications: display a notification badge/panel showing low stock medicine alerts, expiring medicines (within 7 days), low blood stock alerts, and any other system warnings. Alerts are scoped to the logged-in user's hospital.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Alert when stock < minimum quantity",
+          "Notification before expiry (7 days prior)",
+          "Alert notifications"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Notification bell icon in the top navbar shows unread alert count",
+        "Dropdown panel lists each alert with type, message, and timestamp",
+        "Alerts refresh when the user navigates between pages",
+        "Alerts are only shown for the current user's hospital"
+      ]
+    },
+    {
+      "id": "REQ-16",
+      "text": "Implement dark mode toggle: users can switch between light and dark themes. The preference is persisted in localStorage and applied on page load.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Dark mode"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Toggle button is visible in the top navbar",
+        "All pages and components render correctly in both light and dark mode",
+        "Theme preference is stored in localStorage and restored on reload"
+      ]
+    },
+    {
+      "id": "REQ-17",
+      "text": "Implement search and filter controls on all data tables (Medicines, Suppliers, Beds, Blood Bank, Doctors, Appointments). Search is client-side for the currently loaded page data.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Search & filter options"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Each data table has a search input that filters rows by relevant text fields",
+        "Medicines table can be filtered by stock status (low stock, expired, normal)",
+        "Appointments table can be filtered by status",
+        "Filters reset when navigating away and back"
+      ]
+    },
+    {
+      "id": "REQ-18",
+      "text": "Implement client-side PDF export for reports: on each report page, a button triggers a PDF download of the currently displayed report data using a frontend PDF library.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Export reports to PDF"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Each report page has an 'Export to PDF' button",
+        "Clicking the button downloads a PDF containing the report title, date, and tabular data",
+        "PDF export works for Medicine Stock, Bed Occupancy, and Blood Stock reports"
+      ]
+    },
+    {
+      "id": "REQ-19",
+      "text": "Apply a clean, modern medical-grade visual theme: use a white and teal/green primary palette with crisp sans-serif typography, card-based layouts with subtle shadows, a collapsible sidebar, and consistent status-color coding (red for alerts, green for available, amber for warnings). Enforce this theme consistently across all pages and both light/dark modes.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Clean and modern UI",
+          "Sidebar navigation",
+          "Dashboard cards with statistics",
+          "Responsive design"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Primary color is teal/green; alert accents use red and amber",
+        "Sidebar is collapsible and highlights the active route",
+        "Dashboard stat cards use icons, bold numbers, and color-coded borders",
+        "Layout is responsive and usable on tablet and desktop viewports"
+      ]
+    },
+    {
+      "id": "REQ-20",
+      "text": "Generate a hospital dashboard logo/icon and a hero illustration for the login/landing page.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Clean and modern UI"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Logo icon is rendered in the sidebar header",
+        "Hero illustration is displayed on the login page background or panel"
+      ]
+    }
+  ],
+  "constraints": [
+    "Backend must use a single Motoko actor (no microservices or multiple canisters).",
+    "Authentication must use Internet Identity only — no JWT, no external auth providers.",
+    "No external databases (MongoDB, PostgreSQL, etc.) — use Motoko stable storage.",
+    "No Node.js/Express backend — all backend logic in Motoko.",
+    "No email notification service integrations (SendGrid, SMTP, etc.).",
+    "No real-time WebSocket features.",
+    "Frontend immutable paths (hooks/useInternetIdentity, hooks/useActor, main.tsx, components/ui) must not be modified."
+  ],
+  "nonGoals": [
+    "Node.js / Express backend implementation",
+    "MongoDB or any external database integration",
+    "JWT-based authentication",
+    "Email notifications via SMTP or third-party services",
+    "Real-time push notifications or WebSockets",
+    "Mobile app (React Native / Flutter)",
+    "Multi-canister or microservices architecture",
+    "Subscription billing / payment processing",
+    "GPS or geolocation features"
+  ],
+  "imageRequirements": {
+    "required": [
+      "Minimalist teal and white hospital cross logo icon on a clean rounded square background (hms-logo-icon.dim_128x128.png)",
+      "Modern medical dashboard hero illustration showing abstract hospital building silhouette with teal gradient and subtle data visualization elements (hms-hero-illustration.dim_1200x600.png)"
+    ],
+    "edits": []
+  }
+}

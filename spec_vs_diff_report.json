@@ -1,0 +1,153 @@
+{
+  "kind": "spec_vs_diff_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-28T04:03:04.592Z",
+  "summary": "The diff implements a significant portion of the HMS requirements including Internet Identity auth, multi-tenant backend, CRUD for most entities, role-based dashboards, alerts, dark mode, search/filter tables, PDF export, and a medical theme. However, several specific acceptance criteria are missing or only partially implemented, particularly around backend-enforced multi-tenancy for all entity types, automatic stock deduction on treatment, doctor-scoped appointment filtering, patient appointment/prescribed medicines view, and images.",
+  "missing_requirements": [
+    {
+      "requirement": "Stock quantity updates automatically when a treatment record uses a medicine (REQ-4 AC)",
+      "reason": "The DoctorDashboard saves treatment notes locally but there is no call to a backend mutation that deducts medicine stock.",
+      "evidence": [
+        "frontend/src/components/dashboards/DoctorDashboard.tsx"
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "requirement": "Expose a query returning all medicines linked to a given supplier",
+      "reason": "No evidence of a getMedicinesBySupplier query being called or exposed. SuppliersPage only shows supplier CRUD with no medicines-by-supplier query.",
+      "evidence": [
+        "frontend/src/components/dashboards/admin/SuppliersPage.tsx",
+        "backend/main.mo"
+      ]
+    },
+    {
+      "id": "REQ-9",
+      "requirement": "Doctors see only appointments assigned to them (backend-enforced)",
+      "reason": "The DoctorDashboard reads all appointments from localStorage filtered by hospitalId only, not by the doctor's principal. No backend query filters appointments to the calling doctor.",
+      "evidence": [
+        "frontend/src/components/dashboards/DoctorDashboard.tsx"
+      ]
+    },
+    {
+      "id": "REQ-9",
+      "requirement": "Patients can create an appointment record linked to a doctorId and hospitalId via the backend",
+      "reason": "PatientDashboard books appointments entirely via localStorage, not via a backend canister call. Appointments are never persisted in Motoko stable storage.",
+      "evidence": [
+        "frontend/src/components/dashboards/PatientDashboard.tsx"
+      ]
+    },
+    {
+      "id": "REQ-10",
+      "requirement": "Super Admin report aggregates data across all hospitals; getMedicineStockReport, getBedOccupancyReport, getBloodStockReport backend queries",
+      "reason": "ReportsPage is only implemented for Hospital Admin scope. No Super Admin report page or cross-hospital aggregation query is visible in the diff.",
+      "evidence": [
+        "frontend/src/components/dashboards/admin/ReportsPage.tsx",
+        "frontend/src/components/dashboards/SuperAdminDashboard.tsx"
+      ]
+    },
+    {
+      "id": "REQ-11",
+      "requirement": "System-wide report summary cards are displayed on the Super Admin dashboard",
+      "reason": "SuperAdminDashboard shows hospital count and registered admin stats but no system-wide report summary cards for medicine stock, bed occupancy, or blood stock across all hospitals.",
+      "evidence": [
+        "frontend/src/components/dashboards/SuperAdminDashboard.tsx"
+      ]
+    },
+    {
+      "id": "REQ-14",
+      "requirement": "Doctor availability calendar or slot picker is shown when booking",
+      "reason": "PatientDashboard shows a plain datetime input for booking, not a calendar or slot picker tied to doctor availability.",
+      "evidence": [
+        "frontend/src/components/dashboards/PatientDashboard.tsx"
+      ]
+    },
+    {
+      "id": "REQ-14",
+      "requirement": "Prescribed medicines list is visible per appointment",
+      "reason": "No prescribed medicines list is shown per appointment in the PatientDashboard.",
+      "evidence": [
+        "frontend/src/components/dashboards/PatientDashboard.tsx"
+      ]
+    },
+    {
+      "id": "REQ-15",
+      "requirement": "Alerts refresh when the user navigates between pages",
+      "reason": "AlertNotifications component fetches data on mount but there is no explicit refetch-on-route-change mechanism evident in the diff.",
+      "evidence": [
+        "frontend/src/components/AlertNotifications.tsx"
+      ]
+    },
+    {
+      "id": "REQ-20",
+      "requirement": "Generate hms-logo-icon.dim_128x128.png and hms-hero-illustration.dim_1200x600.png image files",
+      "reason": "No image files are present in the diff. The build request explicitly requires two image assets.",
+      "evidence": []
+    },
+    {
+      "id": "REQ-8",
+      "requirement": "Doctor records persisted in Motoko stable storage via backend calls",
+      "reason": "DoctorsPage manages doctors entirely via localStorage (hms-doctors key) rather than calling backend canister mutations.",
+      "evidence": [
+        "frontend/src/components/dashboards/admin/DoctorsPage.tsx"
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "requirement": "Hospital records persisted in Motoko stable storage via backend calls",
+      "reason": "SuperAdminDashboard stores hospital records in localStorage (hms-hospitals key) instead of calling backend canister mutations.",
+      "evidence": [
+        "frontend/src/components/dashboards/SuperAdminDashboard.tsx"
+      ]
+    }
+  ],
+  "hallucinated_features": [
+    {
+      "description": "StaffPage: A full staff management module (Nurse, Receptionist, Lab Technician, etc.) with localStorage persistence",
+      "reason": "The build request does not include a Staff entity in the data models (REQ-3) nor a Staff CRUD requirement beyond Doctors.",
+      "evidence": [
+        "frontend/src/components/dashboards/admin/StaffPage.tsx"
+      ]
+    }
+  ],
+  "confidence": 0.72,
+  "changed_files": [
+    "all_files_summary.json",
+    "backend/main.mo",
+    "frontend-file-summaries.txt",
+    "frontend/index.css",
+    "frontend/index.html",
+    "frontend/src/App.tsx",
+    "frontend/src/components/AlertNotifications.tsx",
+    "frontend/src/components/DarkModeToggle.tsx",
+    "frontend/src/components/LoginPage.tsx",
+    "frontend/src/components/ProfileSetupModal.tsx",
+    "frontend/src/components/ProtectedRoute.tsx",
+    "frontend/src/components/common/DataTable.tsx",
+    "frontend/src/components/common/StatCard.tsx",
+    "frontend/src/components/dashboards/DoctorDashboard.tsx",
+    "frontend/src/components/dashboards/HospitalAdminDashboard.tsx",
+    "frontend/src/components/dashboards/PatientDashboard.tsx",
+    "frontend/src/components/dashboards/SuperAdminDashboard.tsx",
+    "frontend/src/components/dashboards/admin/AppointmentsPage.tsx",
+    "frontend/src/components/dashboards/admin/BedsPage.tsx",
+    "frontend/src/components/dashboards/admin/BloodBankPage.tsx",
+    "frontend/src/components/dashboards/admin/DoctorsPage.tsx",
+    "frontend/src/components/dashboards/admin/MedicinesPage.tsx",
+    "frontend/src/components/dashboards/admin/ReportsPage.tsx",
+    "frontend/src/components/dashboards/admin/StaffPage.tsx",
+    "frontend/src/components/dashboards/admin/SuppliersPage.tsx",
+    "frontend/src/components/layout/AppLayout.tsx",
+    "frontend/src/components/layout/Footer.tsx",
+    "frontend/src/hooks/useActor.ts",
+    "frontend/src/hooks/useDarkMode.ts",
+    "frontend/src/hooks/useInternetIdentity.ts",
+    "frontend/src/hooks/useQueries.ts",
+    "frontend/src/index.css",
+    "frontend/src/lib/utils.ts",
+    "frontend/src/main.tsx",
+    "frontend/src/utils/pdfExport.ts",
+    "frontend/src/utils/urlParams.ts",
+    "frontend/tailwind.config.js",
+    "project_state.json"
+  ]
+}

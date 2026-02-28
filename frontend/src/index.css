@@ -1,0 +1,144 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --radius: 0.5rem;
+
+    /* Teal/Green Medical Theme */
+    --background: 0.98 0.005 200;
+    --foreground: 0.15 0.02 220;
+
+    --card: 1 0 0;
+    --card-foreground: 0.15 0.02 220;
+
+    --popover: 1 0 0;
+    --popover-foreground: 0.15 0.02 220;
+
+    --primary: 0.52 0.13 185;
+    --primary-foreground: 0.99 0 0;
+
+    --secondary: 0.94 0.02 185;
+    --secondary-foreground: 0.35 0.08 185;
+
+    --muted: 0.95 0.01 200;
+    --muted-foreground: 0.52 0.03 220;
+
+    --accent: 0.92 0.04 185;
+    --accent-foreground: 0.35 0.1 185;
+
+    --destructive: 0.58 0.22 27;
+    --destructive-foreground: 0.99 0 0;
+
+    --border: 0.88 0.02 200;
+    --input: 0.88 0.02 200;
+    --ring: 0.52 0.13 185;
+
+    /* Status colors */
+    --success: 0.62 0.17 145;
+    --success-foreground: 0.99 0 0;
+    --warning: 0.75 0.15 75;
+    --warning-foreground: 0.15 0.02 220;
+    --info: 0.55 0.14 240;
+    --info-foreground: 0.99 0 0;
+
+    /* Charts */
+    --chart-1: 0.52 0.13 185;
+    --chart-2: 0.62 0.17 145;
+    --chart-3: 0.75 0.15 75;
+    --chart-4: 0.58 0.22 27;
+    --chart-5: 0.55 0.14 240;
+
+    /* Sidebar */
+    --sidebar: 0.18 0.04 220;
+    --sidebar-foreground: 0.92 0.02 200;
+    --sidebar-primary: 0.52 0.13 185;
+    --sidebar-primary-foreground: 0.99 0 0;
+    --sidebar-accent: 0.28 0.05 220;
+    --sidebar-accent-foreground: 0.92 0.02 200;
+    --sidebar-border: 0.28 0.04 220;
+    --sidebar-ring: 0.52 0.13 185;
+  }
+
+  .dark {
+    --background: 0.12 0.02 220;
+    --foreground: 0.93 0.01 200;
+
+    --card: 0.17 0.03 220;
+    --card-foreground: 0.93 0.01 200;
+
+    --popover: 0.2 0.03 220;
+    --popover-foreground: 0.93 0.01 200;
+
+    --primary: 0.58 0.14 185;
+    --primary-foreground: 0.1 0.02 220;
+
+    --secondary: 0.25 0.04 220;
+    --secondary-foreground: 0.85 0.02 200;
+
+    --muted: 0.22 0.03 220;
+    --muted-foreground: 0.6 0.03 210;
+
+    --accent: 0.28 0.05 220;
+    --accent-foreground: 0.85 0.02 200;
+
+    --destructive: 0.65 0.22 27;
+    --destructive-foreground: 0.99 0 0;
+
+    --border: 0.28 0.03 220;
+    --input: 0.28 0.03 220;
+    --ring: 0.58 0.14 185;
+
+    --success: 0.58 0.16 145;
+    --success-foreground: 0.99 0 0;
+    --warning: 0.72 0.14 75;
+    --warning-foreground: 0.1 0.02 220;
+    --info: 0.55 0.14 240;
+    --info-foreground: 0.99 0 0;
+
+    --chart-1: 0.58 0.14 185;
+    --chart-2: 0.58 0.16 145;
+    --chart-3: 0.72 0.14 75;
+    --chart-4: 0.65 0.22 27;
+    --chart-5: 0.55 0.14 240;
+
+    --sidebar: 0.1 0.02 220;
+    --sidebar-foreground: 0.88 0.02 200;
+    --sidebar-primary: 0.58 0.14 185;
+    --sidebar-primary-foreground: 0.99 0 0;
+    --sidebar-accent: 0.2 0.04 220;
+    --sidebar-accent-foreground: 0.88 0.02 200;
+    --sidebar-border: 0.22 0.03 220;
+    --sidebar-ring: 0.58 0.14 185;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+
+  html {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  }
+}
+
+@layer utilities {
+  .text-success { color: oklch(var(--success)); }
+  .text-warning { color: oklch(var(--warning)); }
+  .text-info { color: oklch(var(--info)); }
+  .bg-success { background-color: oklch(var(--success)); }
+  .bg-warning { background-color: oklch(var(--warning)); }
+  .bg-info { background-color: oklch(var(--info)); }
+  .bg-success\/10 { background-color: oklch(var(--success) / 0.1); }
+  .bg-warning\/10 { background-color: oklch(var(--warning) / 0.1); }
+  .bg-info\/10 { background-color: oklch(var(--info) / 0.1); }
+  .border-success { border-color: oklch(var(--success)); }
+  .border-warning { border-color: oklch(var(--warning)); }
+  .border-info { border-color: oklch(var(--info)); }
+}

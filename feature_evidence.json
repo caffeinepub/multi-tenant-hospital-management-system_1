@@ -1,0 +1,251 @@
+{
+  "kind": "feature_evidence_report",
+  "features": [
+    {
+      "featureId": "feature-implement-internet-identity-authentication-as-the-sole-login-method-replacing-jwt-map-roles-super-admin-hospital-admin-doctor-patient-to-principals-stored-in-the-backend-enforce-role-based-access-control-so-each-principal-can-only-access-endpoints-and-data-permitted-by-their-role",
+      "featureTitle": "Implement Internet Identity authentication as the sole login method, replacing JWT. Map roles (Super Admin, Hospital Admin, Doctor, Patient) to principals stored in the backend. Enforce role-based access control so each principal can only access endpoints and data permitted by their role.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/LoginPage.tsx",
+        "frontend/src/components/ProfileSetupModal.tsx",
+        "frontend/src/components/ProtectedRoute.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-1"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-build-a-super-admin-dashboard-page-showing-total-number-of-hospitals-list-of-hospitals-with-status-and-system-wide-report-summaries-super-admin-can-create-new-hospitals-and-assign-hospital-admin-principals-to-them",
+      "featureTitle": "Build a Super Admin dashboard page showing: total number of hospitals, list of hospitals with status, and system-wide report summaries. Super Admin can create new hospitals and assign Hospital Admin principals to them.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/dashboards/SuperAdminDashboard.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-11"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-build-a-hospital-admin-dashboard-page-with-sidebar-navigation-linking-to-medicines-suppliers-beds-blood-bank-doctors-appointments-staff-and-reports-sections-dashboard-home-shows-summary-stat-cards-for-each-module",
+      "featureTitle": "Build a Hospital Admin dashboard page with sidebar navigation linking to: Medicines, Suppliers, Beds, Blood Bank, Doctors, Appointments, Staff, and Reports sections. Dashboard home shows summary stat cards for each module.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/dashboards/HospitalAdminDashboard.tsx",
+        "frontend/src/components/dashboards/admin/AppointmentsPage.tsx",
+        "frontend/src/components/dashboards/admin/BedsPage.tsx",
+        "frontend/src/components/dashboards/admin/BloodBankPage.tsx",
+        "frontend/src/components/dashboards/admin/DoctorsPage.tsx",
+        "frontend/src/components/dashboards/admin/MedicinesPage.tsx",
+        "frontend/src/components/dashboards/admin/ReportsPage.tsx",
+        "frontend/src/components/dashboards/admin/StaffPage.tsx",
+        "frontend/src/components/dashboards/admin/SuppliersPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-12"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-build-a-doctor-dashboard-page-showing-list-of-assigned-patients-with-appointment-details-a-form-to-update-patient-treatment-notes-and-deduct-medicine-usage-and-a-read-only-medicine-availability-view",
+      "featureTitle": "Build a Doctor dashboard page showing: list of assigned patients with appointment details, a form to update patient treatment notes and deduct medicine usage, and a read-only medicine availability view.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/dashboards/DoctorDashboard.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-13"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-build-a-patient-dashboard-page-allowing-patients-to-book-appointments-by-browsing-doctors-and-available-slots-view-their-own-appointments-check-bed-availability-check-blood-group-availability-and-view-their-prescribed-medicines",
+      "featureTitle": "Build a Patient dashboard page allowing patients to: book appointments by browsing doctors and available slots, view their own appointments, check bed availability, check blood group availability, and view their prescribed medicines.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/dashboards/PatientDashboard.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-14"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-implement-in-app-alert-notifications-display-a-notification-badge-panel-showing-low-stock-medicine-alerts-expiring-medicines-within-7-days-low-blood-stock-alerts-and-any-other-system-warnings-alerts-are-scoped-to-the-logged-in-user-s-hospital",
+      "featureTitle": "Implement in-app alert notifications: display a notification badge/panel showing low stock medicine alerts, expiring medicines (within 7 days), low blood stock alerts, and any other system warnings. Alerts are scoped to the logged-in user's hospital.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/components/AlertNotifications.tsx",
+        "frontend/src/components/layout/AppLayout.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-15"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-implement-dark-mode-toggle-users-can-switch-between-light-and-dark-themes-the-preference-is-persisted-in-localstorage-and-applied-on-page-load",
+      "featureTitle": "Implement dark mode toggle: users can switch between light and dark themes. The preference is persisted in localStorage and applied on page load.",
+      "files": [
+        "frontend/src/components/DarkModeToggle.tsx",
+        "frontend/src/components/layout/AppLayout.tsx",
+        "frontend/src/hooks/useDarkMode.ts",
+        "frontend/src/index.css",
+        "frontend/tailwind.config.js"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-16"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-implement-search-and-filter-controls-on-all-data-tables-medicines-suppliers-beds-blood-bank-doctors-appointments-search-is-client-side-for-the-currently-loaded-page-data",
+      "featureTitle": "Implement search and filter controls on all data tables (Medicines, Suppliers, Beds, Blood Bank, Doctors, Appointments). Search is client-side for the currently loaded page data.",
+      "files": [
+        "frontend/src/components/common/DataTable.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-17"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-implement-client-side-pdf-export-for-reports-on-each-report-page-a-button-triggers-a-pdf-download-of-the-currently-displayed-report-data-using-a-frontend-pdf-library",
+      "featureTitle": "Implement client-side PDF export for reports: on each report page, a button triggers a PDF download of the currently displayed report data using a frontend PDF library.",
+      "files": [
+        "frontend/src/components/dashboards/admin/ReportsPage.tsx",
+        "frontend/src/utils/pdfExport.ts"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-18"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-apply-a-clean-modern-medical-grade-visual-theme-use-a-white-and-teal-green-primary-palette-with-crisp-sans-serif-typography-card-based-layouts-with-subtle-shadows-a-collapsible-sidebar-and-consistent-status-color-coding-red-for-alerts-green-for-available-amber-for-warnings-enforce-this-theme-consistently-across-all-pages-and-both-light-dark-modes",
+      "featureTitle": "Apply a clean, modern medical-grade visual theme: use a white and teal/green primary palette with crisp sans-serif typography, card-based layouts with subtle shadows, a collapsible sidebar, and consistent status-color coding (red for alerts, green for available, amber for warnings). Enforce this theme consistently across all pages and both light/dark modes.",
+      "files": [
+        "frontend/src/components/common/StatCard.tsx",
+        "frontend/src/components/dashboards/HospitalAdminDashboard.tsx",
+        "frontend/src/index.css",
+        "frontend/tailwind.config.js"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-19"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-generate-a-hospital-dashboard-logo-icon-and-a-hero-illustration-for-the-login-landing-page",
+      "featureTitle": "Generate a hospital dashboard logo/icon and a hero illustration for the login/landing page.",
+      "files": [
+        "frontend/src/components/LoginPage.tsx",
+        "frontend/src/components/layout/AppLayout.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-20"
+      ],
+      "confidence": "high"
+    }
+  ]
+}

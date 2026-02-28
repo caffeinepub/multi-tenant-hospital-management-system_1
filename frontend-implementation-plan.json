@@ -1,0 +1,361 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Multi-Tenant Hospital Management System (HMS) - Frontend Implementation",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "summary": "Implement Internet Identity authentication with role-based UI routing",
+      "acceptanceCriteria": [
+        "Users can log in via Internet Identity",
+        "Each user principal is assigned exactly one role",
+        "Role-based navigation redirects users to appropriate dashboards",
+        "Passwords are not stored (Internet Identity handles credentials)"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/LoginPage.tsx",
+          "operation": "create",
+          "description": "Create login page with Internet Identity button and hero illustration (frontend/public/assets/generated/hms-hero-illustration.dim_1200x600.png). Use the authorization component to handle authentication. Include profile setup modal that appears when getCallerUserProfile returns null. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/ProfileSetupModal.tsx",
+          "operation": "create",
+          "description": "Create modal for first-time user profile setup, collecting name and displaying role assignment confirmation. Use saveCallerUserProfile from authorization component. Prevent modal flash using proper loading state checks as per component usage instructions."
+        },
+        {
+          "path": "frontend/src/components/ProtectedRoute.tsx",
+          "operation": "create",
+          "description": "Create route guard component that checks authentication status and user role, redirecting to appropriate dashboard based on AppRole (superAdmin, hospitalAdmin, doctor, patient). Use authorization component's role checking capabilities."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Wire LoginPage as the default route, add ProtectedRoute wrapper for all dashboard routes, and implement role-based routing logic that directs authenticated users to their respective dashboards."
+        }
+      ]
+    },
+    {
+      "id": "REQ-11",
+      "summary": "Build Super Admin dashboard with hospital management and system-wide reports",
+      "acceptanceCriteria": [
+        "Super Admin sees a stats card row: total hospitals, total users",
+        "Table lists all hospitals with name, admin, and status",
+        "Form to create a new hospital and assign a Hospital Admin principal",
+        "System-wide report summary cards are displayed"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/dashboards/SuperAdminDashboard.tsx",
+          "operation": "create",
+          "description": "Create Super Admin dashboard page with stat cards (total hospitals, total users), hospital list table, and system-wide report summaries. Include create hospital form modal with Hospital Admin principal assignment field."
+        },
+        {
+          "path": "frontend/src/hooks/useSuperAdminData.ts",
+          "operation": "create",
+          "description": "Create hook for fetching system-wide data using backend interface methods. Use React Query for data fetching and caching."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Register /super-admin route wrapped with ProtectedRoute requiring superAdmin role, rendering SuperAdminDashboard component."
+        }
+      ]
+    },
+    {
+      "id": "REQ-12",
+      "summary": "Build Hospital Admin dashboard with sidebar navigation and module summary cards",
+      "acceptanceCriteria": [
+        "Sidebar with links to all Hospital Admin modules is present",
+        "Dashboard home shows cards: total medicines, low stock count, bed occupancy, blood stock alerts, pending appointments",
+        "Each module page renders a searchable, filterable data table",
+        "Add/edit forms are accessible from each module page"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/dashboards/HospitalAdminDashboard.tsx",
+          "operation": "create",
+          "description": "Create Hospital Admin dashboard layout with collapsible sidebar containing navigation links (Medicines, Suppliers, Beds, Blood Bank, Doctors, Appointments, Staff, Reports) and main content area displaying summary stat cards."
+        },
+        {
+          "path": "frontend/src/components/dashboards/admin/MedicinesPage.tsx",
+          "operation": "create",
+          "description": "Create medicines management page with searchable data table (REQ-17), add/edit medicine forms, stock quantity display, and expiry date indicators. Fetch medicines using getAllMedicines backend method."
+        },
+        {
+          "path": "frontend/src/components/dashboards/admin/SuppliersPage.tsx",
+          "operation": "create",
+          "description": "Create suppliers management page with searchable data table (REQ-17) and add/edit supplier forms. Fetch suppliers using getAllSuppliers backend method."
+        },
+        {
+          "path": "frontend/src/components/dashboards/admin/BedsPage.tsx",
+          "operation": "create",
+          "description": "Create beds management page with data table showing bed type, status, and controls to toggle status. Display bed statistics using getBedStats backend method."
+        },
+        {
+          "path": "frontend/src/components/dashboards/admin/BloodBankPage.tsx",
+          "operation": "create",
+          "description": "Create blood bank management page with table showing all eight blood groups (A+, A-, B+, B-, AB+, AB-, O+, O-), current quantities, minimum thresholds, and update forms. Fetch data using getAllBloodStock backend method."
+        },
+        {
+          "path": "frontend/src/components/dashboards/admin/DoctorsPage.tsx",
+          "operation": "create",
+          "description": "Create doctors management page with searchable data table (REQ-17), add/edit doctor forms including specialization and availability schedule fields."
+        },
+        {
+          "path": "frontend/src/components/dashboards/admin/AppointmentsPage.tsx",
+          "operation": "create",
+          "description": "Create appointments overview page for Hospital Admin showing all appointments within their hospital with search and filter controls (REQ-17)."
+        },
+        {
+          "path": "frontend/src/components/dashboards/admin/StaffPage.tsx",
+          "operation": "create",
+          "description": "Create staff management page listing hospital staff members with role assignments."
+        },
+        {
+          "path": "frontend/src/components/dashboards/admin/ReportsPage.tsx",
+          "operation": "create",
+          "description": "Create reports page with tabs for Medicine Stock Report, Bed Occupancy Report, and Blood Stock Report, each with PDF export button (REQ-18)."
+        },
+        {
+          "path": "frontend/src/hooks/useHospitalAdminData.ts",
+          "operation": "create",
+          "description": "Create hook for fetching hospital-scoped data using backend interface methods (getAllMedicines, getAllSuppliers, getAllBloodStock, getBedStats, getLowStockMedicines, getExpiringMedicines, getLowStockBloodGroups). Use React Query for data fetching and caching."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Register /hospital-admin route and child routes (/medicines, /suppliers, /beds, /blood-bank, /doctors, /appointments, /staff, /reports) all wrapped with ProtectedRoute requiring hospitalAdmin role."
+        }
+      ]
+    },
+    {
+      "id": "REQ-13",
+      "summary": "Build Doctor dashboard with patient appointments and treatment management",
+      "acceptanceCriteria": [
+        "Doctor sees only their own appointments",
+        "Doctor can update appointment status and add treatment notes",
+        "Medicine availability panel shows current stock for the hospital",
+        "Treatment update automatically triggers stock deduction in the backend"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/dashboards/DoctorDashboard.tsx",
+          "operation": "create",
+          "description": "Create Doctor dashboard page showing assigned appointments list with patient details, treatment notes form, appointment status update controls, and read-only medicine availability panel."
+        },
+        {
+          "path": "frontend/src/hooks/useDoctorData.ts",
+          "operation": "create",
+          "description": "Create hook for fetching doctor-specific data (assigned appointments, medicine availability) using backend interface methods. Use React Query for data fetching and caching."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Register /doctor route wrapped with ProtectedRoute requiring doctor role, rendering DoctorDashboard component."
+        }
+      ]
+    },
+    {
+      "id": "REQ-14",
+      "summary": "Build Patient dashboard with appointment booking and resource availability views",
+      "acceptanceCriteria": [
+        "Doctor availability calendar or slot picker is shown when booking",
+        "Patient can see their upcoming and past appointments",
+        "Bed availability summary card is shown",
+        "Blood group availability table is shown",
+        "Prescribed medicines list is visible per appointment"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/dashboards/PatientDashboard.tsx",
+          "operation": "create",
+          "description": "Create Patient dashboard page with appointment booking section (doctor browser, slot picker), appointments list (upcoming and past), bed availability card using getBedStats, blood group availability table using getAllBloodStock, and prescribed medicines section."
+        },
+        {
+          "path": "frontend/src/components/BookAppointmentModal.tsx",
+          "operation": "create",
+          "description": "Create appointment booking modal with doctor selection dropdown, date/time slot picker based on doctor availability, and confirmation flow."
+        },
+        {
+          "path": "frontend/src/hooks/usePatientData.ts",
+          "operation": "create",
+          "description": "Create hook for fetching patient-specific data (appointments, available doctors, bed stats, blood stock) using backend interface methods. Use React Query for data fetching and caching."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Register /patient route wrapped with ProtectedRoute requiring patient role, rendering PatientDashboard component."
+        }
+      ]
+    },
+    {
+      "id": "REQ-15",
+      "summary": "Implement in-app alert notifications for low stock and expiry warnings",
+      "acceptanceCriteria": [
+        "Notification bell icon in the top navbar shows unread alert count",
+        "Dropdown panel lists each alert with type, message, and timestamp",
+        "Alerts refresh when the user navigates between pages",
+        "Alerts are only shown for the current user's hospital"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/AlertNotifications.tsx",
+          "operation": "create",
+          "description": "Create alert notification component with bell icon badge showing unread count and dropdown panel listing alerts (low stock medicines, expiring medicines, low blood stock). Fetch alerts using getLowStockMedicines, getExpiringMedicines, and getLowStockBloodGroups backend methods."
+        },
+        {
+          "path": "frontend/src/components/layout/AppLayout.tsx",
+          "operation": "create",
+          "description": "Create shared layout component with top navbar containing logo (frontend/public/assets/generated/hms-logo-icon.dim_128x128.png), AlertNotifications component, dark mode toggle (REQ-16), and user profile menu. This layout wraps all dashboard pages."
+        },
+        {
+          "path": "frontend/src/hooks/useAlerts.ts",
+          "operation": "create",
+          "description": "Create hook for fetching and aggregating alert data using backend interface methods (getLowStockMedicines, getExpiringMedicines, getLowStockBloodGroups). Use React Query with auto-refresh on route changes."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Wrap all dashboard routes with AppLayout component to ensure navbar with AlertNotifications is present across the application."
+        }
+      ]
+    },
+    {
+      "id": "REQ-16",
+      "summary": "Implement dark mode toggle with localStorage persistence",
+      "acceptanceCriteria": [
+        "Toggle button is visible in the top navbar",
+        "All pages and components render correctly in both light and dark mode",
+        "Theme preference is stored in localStorage and restored on reload"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/hooks/useDarkMode.ts",
+          "operation": "create",
+          "description": "Create dark mode hook that manages theme state in localStorage, applies dark class to document root, and provides toggle function."
+        },
+        {
+          "path": "frontend/src/components/DarkModeToggle.tsx",
+          "operation": "create",
+          "description": "Create dark mode toggle button component using useDarkMode hook, rendering sun/moon icon based on current theme."
+        },
+        {
+          "path": "frontend/src/components/layout/AppLayout.tsx",
+          "operation": "modify",
+          "description": "Add DarkModeToggle component to the top navbar next to AlertNotifications."
+        },
+        {
+          "path": "frontend/src/index.css",
+          "operation": "modify",
+          "description": "Add dark mode CSS variables and color scheme definitions for both light and dark themes using teal/green primary palette with status colors (red alerts, green available, amber warnings) as per REQ-19."
+        },
+        {
+          "path": "frontend/tailwind.config.js",
+          "operation": "modify",
+          "description": "Configure Tailwind dark mode variant and extend theme with custom color palette (teal/green primary, red/amber/green status colors) matching REQ-19 design requirements."
+        }
+      ]
+    },
+    {
+      "id": "REQ-17",
+      "summary": "Implement search and filter controls on all data tables",
+      "acceptanceCriteria": [
+        "Each data table has a search input that filters rows by relevant text fields",
+        "Medicines table can be filtered by stock status (low stock, expired, normal)",
+        "Appointments table can be filtered by status",
+        "Filters reset when navigating away and back"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/common/DataTable.tsx",
+          "operation": "create",
+          "description": "Create reusable data table component with integrated search input, filter dropdowns, sorting controls, and pagination. Accepts generic data array and column configuration props."
+        },
+        {
+          "path": "frontend/src/hooks/useTableFilters.ts",
+          "operation": "create",
+          "description": "Create hook managing client-side table filtering state (search query, active filters, sort order) with reset on unmount to satisfy filter reset requirement."
+        }
+      ]
+    },
+    {
+      "id": "REQ-18",
+      "summary": "Implement client-side PDF export for reports",
+      "acceptanceCriteria": [
+        "Each report page has an 'Export to PDF' button",
+        "Clicking the button downloads a PDF containing the report title, date, and tabular data",
+        "PDF export works for Medicine Stock, Bed Occupancy, and Blood Stock reports"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/utils/pdfExport.ts",
+          "operation": "create",
+          "description": "Create PDF export utility using a frontend PDF library (e.g., jspdf, pdfmake) that accepts report data and generates downloadable PDF with title, timestamp, and formatted table."
+        },
+        {
+          "path": "frontend/src/components/dashboards/admin/ReportsPage.tsx",
+          "operation": "modify",
+          "description": "Add 'Export to PDF' button to each report tab that calls pdfExport utility with current report data."
+        }
+      ]
+    },
+    {
+      "id": "REQ-19",
+      "summary": "Apply clean, modern medical-grade visual theme with teal/green palette and consistent styling",
+      "acceptanceCriteria": [
+        "Primary color is teal/green; alert accents use red and amber",
+        "Sidebar is collapsible and highlights the active route",
+        "Dashboard stat cards use icons, bold numbers, and color-coded borders",
+        "Layout is responsive and usable on tablet and desktop viewports"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/index.css",
+          "operation": "modify",
+          "description": "Define global CSS variables for teal/green primary palette, status colors (red alerts, amber warnings, green available), typography (clean sans-serif font stack), card shadows, and spacing scale. Ensure theme works in both light and dark modes."
+        },
+        {
+          "path": "frontend/tailwind.config.js",
+          "operation": "modify",
+          "description": "Extend Tailwind theme with custom color palette (teal-500 primary, red-500 alert, amber-500 warning, green-500 success), configure responsive breakpoints for tablet/desktop, and add custom component variants."
+        },
+        {
+          "path": "frontend/src/components/common/StatCard.tsx",
+          "operation": "create",
+          "description": "Create reusable stat card component with icon slot, bold number display, label text, and color-coded border props matching medical-grade design requirements."
+        },
+        {
+          "path": "frontend/src/components/common/Sidebar.tsx",
+          "operation": "create",
+          "description": "Create collapsible sidebar component with navigation links, active route highlighting, collapse toggle button, and consistent teal/green accent styling."
+        },
+        {
+          "path": "frontend/src/components/dashboards/HospitalAdminDashboard.tsx",
+          "operation": "modify",
+          "description": "Integrate Sidebar component into Hospital Admin layout and ensure stat cards use StatCard component with appropriate color-coded borders."
+        }
+      ]
+    },
+    {
+      "id": "REQ-20",
+      "summary": "Wire generated hospital logo and hero illustration into the application",
+      "acceptanceCriteria": [
+        "Logo icon is rendered in the sidebar header",
+        "Hero illustration is displayed on the login page background or panel"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/layout/AppLayout.tsx",
+          "operation": "modify",
+          "description": "Add logo image (frontend/public/assets/generated/hms-logo-icon.dim_128x128.png) to sidebar header and top navbar branding area."
+        },
+        {
+          "path": "frontend/src/components/LoginPage.tsx",
+          "operation": "modify",
+          "description": "Add hero illustration (frontend/public/assets/generated/hms-hero-illustration.dim_1200x600.png) to login page layout as background image or within a hero panel section."
+        }
+      ]
+    }
+  ]
+}

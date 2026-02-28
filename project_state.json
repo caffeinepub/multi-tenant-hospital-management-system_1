@@ -1,0 +1,254 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 3,
+  "summary": "Multi-Tenant Hospital Management System (HMS) web app using React.js, Node.js + Express, MongoDB, and JWT. Supports multiple hospitals with isolated data. Four roles: Super Admin, Hospital Admin, Doctor, Patient. Includes medicine management, real-time stock tracking, expiry monitoring, low stock alerts, supplier management, bed management, blood bank, doctor management, appointment system, reports dashboard, and role-based access control. Separate dashboards per role. Bonus: dark mode, search/filter, PDF export, email notifications.",
+  "architectural_notes": [
+    "Stack: React.js frontend, Node.js + Express backend, MongoDB database, JWT authentication",
+    "Multi-tenancy via hospitalId field scoping all tenant-specific collections (Users, Medicines, Suppliers, Beds, BloodStock, Appointments, Reports)",
+    "MongoDB collections: Users, Hospitals, Medicines, Suppliers, Beds, BloodStock, Appointments, Reports",
+    "Role hierarchy: superadmin > hospitalAdmin > doctor > patient; middleware enforces role + tenant checks on every API route"
+  ],
+  "known_issues": [],
+  "isFixRequest": false,
+  "imageRequirements": "## Required Images\n- Minimalist teal and white hospital cross logo icon on a clean rounded square background (hms-logo-icon.dim_128x128.png)\n- Modern medical dashboard hero illustration showing abstract hospital building silhouette with teal gradient and subtle data visualization elements (hms-hero-illustration.dim_1200x600.png)",
+  "existing_features": [
+    {
+      "id": "feature-implement-internet-identity-authentication-as-the-sole-login-method-replacing-jwt-map-roles-super-admin-hospital-admin-doctor-patient-to-principals-stored-in-the-backend-enforce-role-based-access-control-so-each-principal-can-only-access-endpoints-and-data-permitted-by-their-role",
+      "title": "Implement Internet Identity authentication as the sole login method, replacing JWT. Map roles (Super Admin, Hospital Admin, Doctor, Patient) to principals stored in the backend. Enforce role-based access control so each principal can only access endpoints and data permitted by their role.",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-a-super-admin-dashboard-page-showing-total-number-of-hospitals-list-of-hospitals-with-status-and-system-wide-report-summaries-super-admin-can-create-new-hospitals-and-assign-hospital-admin-principals-to-them",
+      "title": "Build a Super Admin dashboard page showing: total number of hospitals, list of hospitals with status, and system-wide report summaries. Super Admin can create new hospitals and assign Hospital Admin principals to them.",
+      "reqIds": [
+        "REQ-11"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-a-hospital-admin-dashboard-page-with-sidebar-navigation-linking-to-medicines-suppliers-beds-blood-bank-doctors-appointments-staff-and-reports-sections-dashboard-home-shows-summary-stat-cards-for-each-module",
+      "title": "Build a Hospital Admin dashboard page with sidebar navigation linking to: Medicines, Suppliers, Beds, Blood Bank, Doctors, Appointments, Staff, and Reports sections. Dashboard home shows summary stat cards for each module.",
+      "reqIds": [
+        "REQ-12"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-a-doctor-dashboard-page-showing-list-of-assigned-patients-with-appointment-details-a-form-to-update-patient-treatment-notes-and-deduct-medicine-usage-and-a-read-only-medicine-availability-view",
+      "title": "Build a Doctor dashboard page showing: list of assigned patients with appointment details, a form to update patient treatment notes and deduct medicine usage, and a read-only medicine availability view.",
+      "reqIds": [
+        "REQ-13"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-build-a-patient-dashboard-page-allowing-patients-to-book-appointments-by-browsing-doctors-and-available-slots-view-their-own-appointments-check-bed-availability-check-blood-group-availability-and-view-their-prescribed-medicines",
+      "title": "Build a Patient dashboard page allowing patients to: book appointments by browsing doctors and available slots, view their own appointments, check bed availability, check blood group availability, and view their prescribed medicines.",
+      "reqIds": [
+        "REQ-14"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-in-app-alert-notifications-display-a-notification-badge-panel-showing-low-stock-medicine-alerts-expiring-medicines-within-7-days-low-blood-stock-alerts-and-any-other-system-warnings-alerts-are-scoped-to-the-logged-in-user-s-hospital",
+      "title": "Implement in-app alert notifications: display a notification badge/panel showing low stock medicine alerts, expiring medicines (within 7 days), low blood stock alerts, and any other system warnings. Alerts are scoped to the logged-in user's hospital.",
+      "reqIds": [
+        "REQ-15"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-dark-mode-toggle-users-can-switch-between-light-and-dark-themes-the-preference-is-persisted-in-localstorage-and-applied-on-page-load",
+      "title": "Implement dark mode toggle: users can switch between light and dark themes. The preference is persisted in localStorage and applied on page load.",
+      "reqIds": [
+        "REQ-16"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-search-and-filter-controls-on-all-data-tables-medicines-suppliers-beds-blood-bank-doctors-appointments-search-is-client-side-for-the-currently-loaded-page-data",
+      "title": "Implement search and filter controls on all data tables (Medicines, Suppliers, Beds, Blood Bank, Doctors, Appointments). Search is client-side for the currently loaded page data.",
+      "reqIds": [
+        "REQ-17"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-client-side-pdf-export-for-reports-on-each-report-page-a-button-triggers-a-pdf-download-of-the-currently-displayed-report-data-using-a-frontend-pdf-library",
+      "title": "Implement client-side PDF export for reports: on each report page, a button triggers a PDF download of the currently displayed report data using a frontend PDF library.",
+      "reqIds": [
+        "REQ-18"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-apply-a-clean-modern-medical-grade-visual-theme-use-a-white-and-teal-green-primary-palette-with-crisp-sans-serif-typography-card-based-layouts-with-subtle-shadows-a-collapsible-sidebar-and-consistent-status-color-coding-red-for-alerts-green-for-available-amber-for-warnings-enforce-this-theme-consistently-across-all-pages-and-both-light-dark-modes",
+      "title": "Apply a clean, modern medical-grade visual theme: use a white and teal/green primary palette with crisp sans-serif typography, card-based layouts with subtle shadows, a collapsible sidebar, and consistent status-color coding (red for alerts, green for available, amber for warnings). Enforce this theme consistently across all pages and both light/dark modes.",
+      "reqIds": [
+        "REQ-19"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-generate-a-hospital-dashboard-logo-icon-and-a-hero-illustration-for-the-login-landing-page",
+      "title": "Generate a hospital dashboard logo/icon and a hero illustration for the login/landing page.",
+      "reqIds": [
+        "REQ-20"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Multi-tenancy: isolated data per hospital",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "Role-based access control: Super Admin, Hospital Admin, Doctor, Patient",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "JWT authentication with password encryption",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-4",
+      "summary": "Medicine management: CRUD, stock tracking, low stock alerts, expiry monitoring",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-5",
+      "summary": "Supplier management: add/edit suppliers, track supplier medicines",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-6",
+      "summary": "Bed management: total/available/occupied/ICU beds tracking",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-7",
+      "summary": "Blood bank management: blood group availability, quantity, low stock alerts",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-8",
+      "summary": "Doctor management: add doctors, availability, specialization, appointment scheduling",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-9",
+      "summary": "Appointment system: patient booking, doctor availability calendar",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-10",
+      "summary": "Reports dashboard: medicine usage, stock, expired medicines, bed occupancy, blood stock; PDF export",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-11",
+      "summary": "Separate dashboards for Super Admin, Hospital Admin, Doctor, Patient",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-12",
+      "summary": "Bonus: dark mode, search/filter, email notifications",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-14",
+      "summary": "Implement multi-tenancy in the backend: every Hospital Admin, Doctor, Supplier, Medicine, Bed, BloodStock, and Appointment record must carry a hospitalId. All queries must be scoped to the caller's hospitalId so data from one hospital is never visible to another hospital.",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-15",
+      "summary": "Create backend data models and CRUD operations for: Users, Hospitals, Medicines (with stock quantity, minimum quantity, expiry date, supplierId), Suppliers, Beds (type: general/ICU, status: available/occupied), BloodStock (blood group, quantity, minimum quantity), Appointments (patientId, doctorId, hospitalId, datetime, status), and Reports (aggregated snapshots).",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-16",
+      "summary": "Implement Medicine Management: Hospital Admins can add, update, and delete medicines. Track current stock quantity. Expose a query that returns medicines with stock below minimum quantity (low stock alert). Expose a query that returns medicines whose expiry date has passed or is within 7 days (expiry alert).",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-17",
+      "summary": "Implement Supplier Management: Hospital Admins can add and edit suppliers. Each medicine record can reference a supplierId. Expose a query returning all medicines linked to a given supplier.",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-18",
+      "summary": "Implement Bed Management: Hospital Admins can add beds with type (General or ICU) and toggle status (Available/Occupied). Expose queries for total beds, available beds, occupied beds, and ICU bed counts per hospital.",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-19",
+      "summary": "Implement Blood Bank Management: Hospital Admins can manage blood group inventory (A+, A-, B+, B-, AB+, AB-, O+, O-) with quantity and minimum threshold. Expose a query returning blood groups below minimum quantity.",
+      "reqIds": [
+        "REQ-7"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-20",
+      "summary": "Implement Doctor Management: Hospital Admins can add doctors with specialization and set their availability schedule. Expose queries for doctor list and availability per hospital.",
+      "reqIds": [
+        "REQ-8"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-21",
+      "summary": "Implement the Appointment System: Patients can book appointments by selecting a doctor and available time slot. Doctors can view their upcoming appointments. Hospital Admins can view all appointments for their hospital.",
+      "reqIds": [
+        "REQ-9"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-22",
+      "summary": "Implement a Reports module: backend exposes aggregated report queries for medicine usage, current stock, expired medicines, bed occupancy rate, and blood stock levels — all scoped per hospital. Super Admin can request reports across all hospitals.",
+      "reqIds": [
+        "REQ-10"
+      ],
+      "status": "pending"
+    }
+  ],
+  "gameProjectType": "none",
+  "projectName": "Multi-Tenant Hospital Management System",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}
